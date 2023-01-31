@@ -4,13 +4,14 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const cookieParser = require('cookie-parser')
 const express = require('express');
+const serverless = require('serverless-http');
 const async = require('async')
 const jwt = require('jsonwebtoken')
 const app = express()
-const databaseServer = require('./services/dbService')
-const authService = require('./services/authService')
-const noteModel = require('./models/noteModel')
-const userModel = require('./models/userModel')
+const databaseServer = require('../functions/services/dbService')
+const authService = require('../functions/services/authService')
+const noteModel = require('../functions/models/noteModel')
+const userModel = require('../functions/models/userModel')
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -22,7 +23,9 @@ app.use(cookieParser());
 
 databaseServer.start();
 
-app.get('/api/v1/notes', authService, (req, res) => {
+const router = express.Router();
+
+router.get('/notes', authService, (req, res) => {
 	let tags = req.query && req.query.tags || false;
 	let query = {};
 
@@ -48,7 +51,7 @@ app.get('/api/v1/notes', authService, (req, res) => {
 	});
 });
 
-app.post('/api/v1/new/note', (req, res) => {
+router.post('/new/note', (req, res) => {
 	const note = req.body && req.body.note || false;
 	var error = {};
 	if (!note) {
@@ -82,7 +85,7 @@ app.post('/api/v1/new/note', (req, res) => {
 	});
 });
 
-app.get('/api/v1/calculate', (req, res) => {
+router.get('/calculate', (req, res) => {
 	const key = req.query && req.query.key || false;
 	const a = req.query && req.query.a && parseFloat(req.query.a) || false;
 	const b = req.query && req.query.b && parseFloat(req.query.b) || false;
@@ -134,7 +137,7 @@ app.get('/api/v1/calculate', (req, res) => {
 	});
 });
 
-app.post('/api/v1/signup', (req, res) => {
+router.post('/signup', (req, res) => {
 	const email = req.body && req.body.email || false;
 	const password = req.body && req.body.password || false;
 	
@@ -175,7 +178,7 @@ app.post('/api/v1/signup', (req, res) => {
 	})
 });
 
-app.post('/api/v1/login', (req, res) => {
+router.post('/login', (req, res) => {
 	const email = req.body && req.body.email || false;
 	const password = req.body && req.body.password || false;
 
@@ -223,7 +226,7 @@ app.post('/api/v1/login', (req, res) => {
 	});
 });
 
-app.get('/api/v1/logout', (req, res) => {
+router.get('/logout', (req, res) => {
 	return res.cookie("authToken", "", {
 		httpOnly: false,
 		domain: 'localhost',
@@ -231,6 +234,7 @@ app.get('/api/v1/logout', (req, res) => {
 	}).send('Successfully logged out');
 });
 
-app.listen(process.env.API_PORT, () => {
-	console.log(`\nServer has been started at http://localhost:${process.env.API_PORT}/\n`,);
-})
+app.use('/.netlify/functions/api/v1', router);
+
+module.exports = app;
+module.exports.handler = serverless(app);
