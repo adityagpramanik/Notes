@@ -82,7 +82,7 @@ app.post('/api/v1/new/note', (req, res) => {
 	});
 });
 
-app.get('/calculate', (req, res) => {
+app.get('/api/v1/calculate', (req, res) => {
 	const key = req.query && req.query.key || false;
 	const a = req.query && req.query.a && parseFloat(req.query.a) || false;
 	const b = req.query && req.query.b && parseFloat(req.query.b) || false;
@@ -134,7 +134,7 @@ app.get('/calculate', (req, res) => {
 	});
 });
 
-app.post('/signup', (req, res) => {
+app.post('/api/v1/signup', (req, res) => {
 	const email = req.body && req.body.email || false;
 	const password = req.body && req.body.password || false;
 	
@@ -175,7 +175,7 @@ app.post('/signup', (req, res) => {
 	})
 });
 
-app.post('/login', (req, res) => {
+app.post('/api/v1/login', (req, res) => {
 	const email = req.body && req.body.email || false;
 	const password = req.body && req.body.password || false;
 
@@ -223,7 +223,7 @@ app.post('/login', (req, res) => {
 	});
 });
 
-app.get('/logout', (req, res) => {
+app.get('/api/v1/logout', (req, res) => {
 	return res.cookie("authToken", "", {
 		httpOnly: false,
 		domain: 'localhost',
