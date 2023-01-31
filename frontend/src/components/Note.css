@@ -1,0 +1,42 @@
+.card {
+    max-width: 300px;
+    width: 300px;
+    min-height: 250px;
+    background: #02b875;
+    padding: 30px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #fff;
+    margin: 20px;
+    box-shadow: rgb(50 50 93 / 15%) 0px 20px 20px -12px, rgb(0 0 0 / 20%) 0px 20px 20px -18px;
+}
+
+.card-title {
+    margin-top: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+}
+
+.card-content {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+}
+
+.tags {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	display: flex;
+	gap: 1rem;
+}
+
+.tag {
+    padding: 2px 12px;
+	font-family: 'Inter', sans-serif;
+	border-radius: 100rem;
+	background-color: #06744b;
+	color: #d8fde8;
+	font-weight: bold;
+}
